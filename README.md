@@ -45,18 +45,18 @@ You’ll build a Product API that:
 ### `GET /products?country={country}`
 Returns all products for the given country, including their **final price**.
 
-### `POST /products/{id}/discount`
-Applies a discount to a product in a concurrency-safe way.
+### `PUT /products/{id}/discount`
+Applies a discount to a product in a manner that is idempotent and not subject to race conditions.
 
 **Expected behavior:**
 If multiple clients apply the same discount concurrently:
-- Only one succeeds → `{ "applied": true }`
-- Others return → `{ "alreadyApplied": true }`
+- Only first successful request will persist changes
+- Any identical request that follows should not update state or have any side effects
 
 ---
 
 ## Requirements
-- Implement the endpoints described above (GET /products, POST /products/{id}/discount).
+- Implement the endpoints described above (GET /products, PUT /products/{id}/discount).
 - Store products and applied discounts.
 - Calculate finalPrice including VAT and discounts.
 - Ensure the same discount cannot be applied more than once per product.
