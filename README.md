@@ -75,7 +75,7 @@ If multiple clients apply the same discount concurrently:
     - Description of your concurrency approach
     - At least one **Mermaid sequence diagram** for:
         - `GET /products`
-        - `POST /products/{id}/discount`
+        - `PUT /products/{id}/discount`
 
 ---
 ## 📬 Submission
