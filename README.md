@@ -115,6 +115,7 @@ You should see several test failures. Your job is to fix them!
 ## 🐛 Issues
 
 The tests are failing for various reasons. Some bugs are subtle, others are more obvious
+
 **Edge cases and validation** — not all bugs cause test failures! Think critically about what could go wrong.
 
 ---
