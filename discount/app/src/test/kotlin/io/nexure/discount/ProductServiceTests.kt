@@ -22,8 +22,8 @@ import kotlin.test.assertTrue
 /**
  * Test suite for the Product Discount Service.
  * 
- * IMPORTANT: Do NOT modify the test expectations!
  * Your job is to fix the implementation to make these tests pass.
+ * If you identify tests with incorrect expectations, you may modify them (document why!).
  */
 class ProductServiceTests {
     

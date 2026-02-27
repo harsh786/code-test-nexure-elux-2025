@@ -24,7 +24,7 @@ This should take approximately **1-2 hours**. We value your time!
 - ✅ Add missing configuration
 - ✅ Fix database/concurrency issues
 - ✅ Add proper validation and error handling where needed
-- ❌ Do NOT change existing test assertions
+- ✅ You may modify or add tests if you identify incorrect test expectations (document why!)
 - ❌ Do NOT simplify the requirements
 
 ---
