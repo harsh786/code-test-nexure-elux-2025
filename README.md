@@ -2,9 +2,9 @@
 
 ## 📋 Assignment Overview
 
-We've implemented a Ktor service for managing products and discounts, but **the tests are failing**. Your task is to **identify and fix the bugs** causing the test failures.
+We've implemented a Ktor service for managing products and discounts, but **the tests are failing**. Your task is to **identify and fix the bugs** causing the test failures, and ensure the implementation meets the business requirements.
 
-**Important:** Do NOT modify the test expectations — they are correct and represent the actual business requirements. Fix the implementation to make the tests pass.
+**Important:** The failing tests indicate what needs to be fixed. However, passing tests don't guarantee correct implementation — think critically about the business logic and edge cases.
 
 ## ⏱️ Time Expectation
 This should take approximately **1-2 hours**. We value your time!
@@ -15,14 +15,16 @@ This should take approximately **1-2 hours**. We value your time!
 
 1. **Run the tests** — you'll see multiple failures
 2. **Analyze the failures** — understand what's expected vs. what's happening
-3. **Fix the bugs** — modify the implementation code (NOT the tests)
-4. **Verify** — ensure all tests pass
+3. **Fix the bugs** — modify the implementation code to make tests pass
+4. **Review the business logic** — ensure the implementation handles edge cases properly
+5. **Verify** — all tests should pass AND the business logic should be sound
 
 ### Rules:
 - ✅ Fix implementation code
 - ✅ Add missing configuration
 - ✅ Fix database/concurrency issues
-- ❌ Do NOT change test assertions or expectations
+- ✅ Add proper validation and error handling where needed
+- ❌ Do NOT change existing test assertions
 - ❌ Do NOT simplify the requirements
 
 ---
