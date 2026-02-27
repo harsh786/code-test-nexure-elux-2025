@@ -112,14 +112,10 @@ You should see several test failures. Your job is to fix them!
 
 ---
 
-## 🐛 Known Issues (Hints)
+## 🐛 Issues
 
-The tests are failing for various reasons. Some bugs are subtle, others are more obvious. Pay attention to:
-- Serialization/deserialization of JSON
-- Discount calculation logic
-- Database constraints and indexes
-- Race conditions under concurrent access
-- **Edge cases and validation** — not all bugs cause test failures! Think critically about what could go wrong with invalid or unexpected inputs.
+The tests are failing for various reasons. Some bugs are subtle, others are more obvious
+**Edge cases and validation** — not all bugs cause test failures! Think critically about what could go wrong.
 
 ---
 
