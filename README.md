@@ -99,7 +99,7 @@ Applies a discount to a product. Must be idempotent and concurrency-safe.
 ## 🚀 Getting Started
 
 ### Prerequisites
-- JDK 22
+- JDK 21
 - Docker (for MongoDB via Testcontainers)
 
 ### Run Tests
