@@ -177,37 +177,45 @@ class ProductServiceTests {
             )
         )
         
-        val discount = Discount("CONCURRENT25", 25.0)
-        
-        // Test: Simulate 50 concurrent requests trying to apply the same discount
-        // This is the CRITICAL concurrency test!
-        val jobs = List(50) {
+        val idempotencyJobs = List(25) {
             async(Dispatchers.IO) {
-                service.applyDiscount("prod-5", discount)
+                service.applyDiscount("prod-5", Discount("SAME_DISCOUNT", 5.0))
+            }
+        }
+
+        val idempotencyResults = idempotencyJobs.awaitAll()
+        idempotencyResults.forEach { result ->
+            assertNotNull(result)
+        }
+
+        var product = repository.findById("prod-5")
+        assertNotNull(product)
+        assertEquals(1, product.discounts.size)
+        assertEquals("SAME_DISCOUNT", product.discounts[0].discountId)
+
+        val concurrencyJobs = List(25) { index ->
+            async(Dispatchers.IO) {
+                service.applyDiscount("prod-5", Discount("CONCURRENT_DISCOUNT_${index}", 2.0))
             }
         }
         
-        val results = jobs.awaitAll()
-        
-        // Assert: All requests should succeed
-        results.forEach { result ->
-            assertNotNull(result, "All discount application requests should succeed")
+        val concurrencyResults = concurrencyJobs.awaitAll()
+        concurrencyResults.forEach { result ->
+            assertNotNull(result)
         }
-        
-        // Verify that despite 50 concurrent requests, the discount was only applied ONCE
-        val finalProduct = repository.findById("prod-5")
-        assertNotNull(finalProduct)
-        assertEquals(1, finalProduct.discounts.size,
-            "Concurrent requests resulted in duplicate discounts! " +
-            "The discount application must be concurrency-safe at the database level.")
-        assertEquals("CONCURRENT25", finalProduct.discounts[0].discountId)
-        
-        // Verify final price
-        val productResponse = service.getProductsByCountry("Germany").find { it.id == "prod-5" }
-        assertNotNull(productResponse)
-        // Expected: 100 * (1 - 0.25) * (1 + 0.19) = 89.25
-        assertEquals(89.25, productResponse.finalPrice, 0.01,
-            "Final price should reflect only ONE application of the discount")
+
+        product = repository.findById("prod-5")
+        assertNotNull(product)
+        assertEquals(26, product.discounts.size)
+
+        val discountIds = product.discounts.map { it.discountId }.toSet()
+        assertEquals(26, discountIds.size)
+
+        assertTrue(discountIds.contains("SAME_DISCOUNT"))
+
+        for (i in 0 until 25) {
+            assertTrue(discountIds.contains("CONCURRENT_DISCOUNT_$i"))
+        }
     }
     
     @Test
