@@ -12,10 +12,12 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.put
 import io.ktor.server.routing.routing
 import io.nexure.discount.model.ApplyDiscountRequest
+import io.nexure.discount.model.Discount
 import io.nexure.discount.repository.ProductRepository
 import io.nexure.discount.service.ProductService
 
-const val DISCOUNT_ENDPOINT = "/discount"
+const val PRODUCTS_ENDPOINT = "/products"
+const val PRODUCT_DISCOUNT_ENDPOINT = "/products/{id}/discount"
 
 fun main() {
     embeddedServer(
@@ -27,22 +29,22 @@ fun main() {
 }
 
 fun Application.module() {
-    val mongoUri = environment.config.propertyOrNull("mongodb.uri")?.getString() 
+    val mongoConnectionString = environment.config.propertyOrNull("mongodb.uri")?.getString()
         ?: "mongodb://localhost:27017"
     
-    val mongoClient = MongoClient.create(mongoUri)
+    val mongoClient = MongoClient.create(mongoConnectionString)
     val repository = ProductRepository(mongoClient)
     val service = ProductService(repository)
     
     // Initialize repository
-    environment.monitor.subscribe(ApplicationStarted) {
+    monitor.subscribe(ApplicationStarted) {
         kotlinx.coroutines.runBlocking {
             repository.init()
         }
     }
     
     routing {
-        get("/products") {
+        get(PRODUCTS_ENDPOINT) {
             val country = call.request.queryParameters["country"]
             if (country == null) {
                 call.respond(HttpStatusCode.BadRequest, "Country parameter is required")
@@ -53,7 +55,7 @@ fun Application.module() {
             call.respond(products)
         }
         
-        put("/products/{id}/discount") {
+        put(PRODUCT_DISCOUNT_ENDPOINT) {
             val productId = call.parameters["id"]
             if (productId == null) {
                 call.respond(HttpStatusCode.BadRequest, "Product ID is required")
@@ -61,8 +63,7 @@ fun Application.module() {
             }
             
             val request = call.receive<ApplyDiscountRequest>()
-            val product = service.applyDiscount(productId, 
-                io.nexure.discount.model.Discount(request.discountId, request.percent))
+            val product = service.applyDiscount(productId, Discount(request.discountId, request.percent))
             
             if (product == null) {
                 call.respond(HttpStatusCode.NotFound, "Product not found")
@@ -72,4 +73,3 @@ fun Application.module() {
         }
     }
 }
-

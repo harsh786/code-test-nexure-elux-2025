@@ -3,14 +3,12 @@ package io.nexure.discount.repository
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.IndexOptions
 import com.mongodb.client.model.Indexes
-import com.mongodb.client.model.Updates
 import com.mongodb.kotlin.client.coroutine.MongoClient
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
 import io.nexure.discount.model.Discount
 import io.nexure.discount.model.Product
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList
-import org.bson.Document
 
 class ProductRepository(mongoClient: MongoClient, databaseName: String = "productdb") {
     private val database: MongoDatabase = mongoClient.getDatabase(databaseName)

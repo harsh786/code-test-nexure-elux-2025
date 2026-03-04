@@ -8,6 +8,6 @@ data class ProductResponse(
     val name: String,
     val basePrice: Double,
     val country: String,
-    val discounts: List<Discount>,
+    val discounts: List<DiscountResponse>,
     val finalPrice: Double
 )
